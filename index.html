@@ -1,0 +1,1071 @@
+<!DOCTYPE html>
+<html lang="ca" class="h-full" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ajustament de Reaccions Químiques | 1r de Batxillerat</title>
+  
+  <!-- Favicon SVG -->
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- KaTeX per al renderitzat de fòrmules i equacions -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+
+  <!-- Google Fonts: Inter & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* VARIABLES CSS PER A TEMES (MODE FOSC I MODE LLUMINÓS) */
+    :root[data-theme="dark"] {
+      --bg-page: #030712;
+      --bg-card: rgba(17, 24, 39, 0.75);
+      --bg-card-solid: #111827;
+      --bg-header: rgba(17, 24, 39, 0.85);
+      --bg-input: #1f2937;
+      --bg-eq-box: rgba(15, 23, 42, 0.9);
+      --text-main: #f9fafb;
+      --text-muted: #9ca3af;
+      --text-sub: #d1d5db;
+      --border-card: rgba(255, 255, 255, 0.08);
+      --border-input: #374151;
+      --input-text: #2dd4bf;
+      --table-hover: rgba(31, 41, 55, 0.5);
+    }
+
+    :root[data-theme="light"] {
+      --bg-page: #f8fafc;
+      --bg-card: rgba(255, 255, 255, 0.85);
+      --bg-card-solid: #ffffff;
+      --bg-header: rgba(255, 255, 255, 0.9);
+      --bg-input: #ffffff;
+      --bg-eq-box: #f1f5f9;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --text-sub: #334155;
+      --border-card: rgba(0, 0, 0, 0.1);
+      --border-input: #cbd5e1;
+      --input-text: #0d9488;
+      --table-hover: rgba(241, 245, 249, 0.8);
+    }
+
+    body {
+      background-color: var(--bg-page);
+      color: var(--text-main);
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    .glass-card {
+      background: var(--bg-card);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border-card);
+      transition: background-color 0.3s ease, border-color 0.3s ease;
+    }
+
+    .eq-box {
+      background-color: var(--bg-eq-box);
+      border-color: var(--border-input);
+      transition: background-color 0.3s ease;
+    }
+
+    .coeff-input {
+      width: 3.8rem;
+      height: 3.2rem;
+      background-color: var(--bg-input);
+      color: var(--input-text);
+      border: 2px solid var(--border-input);
+      font-family: 'JetBrains Mono', monospace;
+      text-align: center;
+      font-size: 1.25rem;
+      font-weight: 700;
+      transition: all 0.2s ease;
+    }
+
+    .coeff-input::placeholder {
+      color: var(--text-muted);
+      opacity: 0.5;
+    }
+
+    .coeff-input:focus {
+      outline: none;
+      transform: scale(1.08);
+      border-color: #14b8a6;
+      box-shadow: 0 0 15px rgba(20, 184, 166, 0.4);
+    }
+
+    /* Hide spin buttons */
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col font-sans antialiased">
+
+  <!-- CAPÇALERA AMB COMMUTADOR DE TEMA -->
+  <header class="border-b sticky top-0 z-50 backdrop-blur-md" style="background-color: var(--bg-header); border-color: var(--border-card);">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex flex-wrap items-center justify-between gap-4">
+      <div class="flex items-center space-x-3">
+        <div class="p-2.5 bg-gradient-to-tr from-teal-500 to-sky-500 rounded-xl shadow-lg shadow-teal-500/20">
+          <svg class="w-7 h-7 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L5.601 15.1a2 2 0 00-1.022.547l-1.12 1.12a2 2 0 000 2.828l.2.2a2 2 0 002.828 0l1.12-1.12a2 2 0 00.547-1.022l.477-2.387a6 6 0 01.517-3.86l.158-.318a6 6 0 00.517-3.86L9.4 5.601a2 2 0 00-.547-1.022l-1.12-1.12a2 2 0 00-2.828 0l-.2.2a2 2 0 000 2.828l1.12 1.12a2 2 0 00.547 1.022l.477 2.387a6 6 0 00.517 3.86l.158.318a6 6 0 01.517 3.86l-.477 2.387z" />
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18" />
+          </svg>
+        </div>
+        <div>
+          <h1 class="text-xl font-bold bg-gradient-to-r from-teal-500 via-sky-500 to-cyan-400 bg-clip-text text-transparent">
+            Ajustament de Reaccions Químiques
+          </h1>
+          <p class="text-xs font-medium" style="color: var(--text-muted)">
+            Física i Química &bull; <span class="text-teal-500 font-semibold">1r de Batxillerat</span> &bull; Mètode de Tempteig
+          </p>
+        </div>
+      </div>
+
+      <div class="flex items-center space-x-3">
+        <!-- BOTÓ COMMUTADOR MODE FOSC / MODE LLUMINÓS -->
+        <button onclick="toggleTheme()" id="themeToggleBtn" class="flex items-center space-x-2 px-3.5 py-2 text-xs font-semibold rounded-xl border transition-all duration-200 shadow-sm hover:scale-105" style="background-color: var(--bg-input); border-color: var(--border-input); color: var(--text-main);">
+          <span id="themeIcon">☀️</span>
+          <span id="themeText">Mode Lluminós</span>
+        </button>
+
+        <!-- Botó de Guia Didàctica -->
+        <button onclick="toggleGuide()" class="flex items-center space-x-2 px-3.5 py-2 text-xs font-semibold rounded-xl bg-teal-500/10 hover:bg-teal-500/20 text-teal-600 dark:text-teal-300 border border-teal-500/30 transition-all duration-200 shadow-sm">
+          <svg class="w-4 h-4 text-teal-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+          <span class="hidden sm:inline">Guia i Teoria</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- CONTINGUT PRINCIPAL -->
+  <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+
+    <!-- GUIA DESPLEGABLE PEDAGÒGICA -->
+    <div id="guideSection" class="hidden glass-card rounded-2xl p-5 border-l-4 border-teal-500 shadow-2xl transition-all">
+      <div class="flex justify-between items-start mb-3">
+        <h2 class="text-lg font-bold text-teal-500 dark:text-teal-300 flex items-center gap-2">
+          <svg class="w-5 h-5 text-teal-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+          Mètode de Tempteig i Ús de Fraccions a 1r de Batxillerat
+        </h2>
+        <button onclick="toggleGuide()" class="text-slate-400 hover:text-slate-200">&times;</button>
+      </div>
+      <div class="grid md:grid-cols-2 gap-6 text-sm leading-relaxed" style="color: var(--text-sub)">
+        <div>
+          <h3 class="font-semibold text-sky-500 dark:text-sky-300 mb-1">Passos Recomanats per Tempteig:</h3>
+          <ol class="list-decimal list-inside space-y-1.5">
+            <li>Ajusta primer els elements que només apareixen en <strong>un únic compost</strong> a cada costat (ex. Carboni, Metalls).</li>
+            <li>Ajusta posteriorment l'<strong>Hidrogen</strong> ($H$).</li>
+            <li>Deixa per al final l'<strong>Òxigen</strong> ($O_2$), ja que sol estar en estat elemental gasós i és més fàcil d'equilibrar.</li>
+            <li>Si no escrius cap número en una casella, el sistema interpreta automàticament un <strong>1</strong>.</li>
+          </ol>
+        </div>
+        <div>
+          <h3 class="font-semibold text-sky-500 dark:text-sky-300 mb-1">Ús de Fraccions i Caselles en Blanc:</h3>
+          <p class="mb-2">
+            A 1r de Batxillerat, en processós com la termoquímica, s'utilitzen coeficients fraccionaris com <code class="px-1.5 py-0.5 rounded text-amber-500 font-mono" style="background-color: var(--bg-input)">1/2</code>, <code class="px-1.5 py-0.5 rounded text-amber-500 font-mono" style="background-color: var(--bg-input)">3/2</code> o <code class="px-1.5 py-0.5 rounded text-amber-500 font-mono" style="background-color: var(--bg-input)">7/2</code> davant de molècules diatòmiques.
+          </p>
+          <p class="text-xs italic" style="color: var(--text-muted)">
+            *Nota: Pots deixar les caselles en blanc (equival a 1) o introduir nombres enters o fraccions dividides per la barra "/".
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- PANELL D'ESTADÍSTIQUES DE SESSIÓ -->
+    <section class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div class="glass-card rounded-xl p-4 flex items-center justify-between border-t-2 border-sky-500">
+        <div>
+          <p class="text-xs uppercase tracking-wider font-semibold" style="color: var(--text-muted)">Completades</p>
+          <p class="text-2xl font-bold font-mono mt-0.5" style="color: var(--text-main)"><span id="statCompleted">0</span> / <span id="statTotal">0</span></p>
+        </div>
+        <div class="p-3 bg-sky-500/10 text-sky-500 rounded-lg">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
+        </div>
+      </div>
+
+      <div class="glass-card rounded-xl p-4 flex items-center justify-between border-t-2 border-emerald-500">
+        <div>
+          <p class="text-xs uppercase tracking-wider font-semibold" style="color: var(--text-muted)">Encerts</p>
+          <p class="text-2xl font-bold text-emerald-500 font-mono mt-0.5" id="statCorrect">0</p>
+        </div>
+        <div class="p-3 bg-emerald-500/10 text-emerald-500 rounded-lg">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+        </div>
+      </div>
+
+      <div class="glass-card rounded-xl p-4 flex items-center justify-between border-t-2 border-rose-500">
+        <div>
+          <p class="text-xs uppercase tracking-wider font-semibold" style="color: var(--text-muted)">Errades</p>
+          <p class="text-2xl font-bold text-rose-500 font-mono mt-0.5" id="statErrors">0</p>
+        </div>
+        <div class="p-3 bg-rose-500/10 text-rose-500 rounded-lg">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </div>
+      </div>
+
+      <div class="glass-card rounded-xl p-4 flex flex-col justify-between border-t-2 border-teal-500">
+        <div class="flex justify-between items-center">
+          <p class="text-xs uppercase tracking-wider font-semibold" style="color: var(--text-muted)">Precisió</p>
+          <span class="text-xs font-bold font-mono text-teal-500" id="statPercent">100%</span>
+        </div>
+        <div class="w-full bg-slate-200 dark:bg-slate-800 rounded-full h-2.5 mt-2 overflow-hidden">
+          <div id="progressBar" class="bg-gradient-to-r from-teal-500 to-emerald-400 h-2.5 rounded-full transition-all duration-500" style="width: 0%"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ZONA INTERACTIVA DE LA REACCIÓ -->
+    <section class="glass-card rounded-2xl p-6 shadow-2xl relative overflow-hidden">
+      <!-- Capçalera de la reacció -->
+      <div class="flex flex-wrap items-center justify-between gap-3 mb-6 pb-4 border-b" style="border-color: var(--border-card);">
+        <div class="flex items-center space-x-3">
+          <span class="px-3 py-1 border text-teal-600 dark:text-teal-300 text-xs font-semibold rounded-full font-mono" style="background-color: var(--bg-input); border-color: var(--border-input)" id="reactionTypeBadge">
+            Tipus de Reacció
+          </span>
+          <span class="text-xs font-mono" style="color: var(--text-muted)">Reacció <span id="currentIdxText">1</span> de <span id="totalIdxText">18</span></span>
+        </div>
+
+        <div class="flex items-center space-x-2">
+          <button onclick="prevReaction()" class="px-3 py-1.5 rounded-lg text-xs font-semibold border transition" style="background-color: var(--bg-input); border-color: var(--border-input); color: var(--text-main)">
+            &larr; Anterior
+          </button>
+          <button onclick="randomReaction()" class="px-3 py-1.5 rounded-lg text-xs font-semibold border flex items-center space-x-1 transition" style="background-color: var(--bg-input); border-color: var(--border-input); color: var(--text-main)">
+            <svg class="w-3.5 h-3.5 text-teal-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+            <span>Aleatòria</span>
+          </button>
+          <button onclick="nextReaction()" class="px-3 py-1.5 rounded-lg text-xs font-semibold border transition" style="background-color: var(--bg-input); border-color: var(--border-input); color: var(--text-main)">
+            Següent &rarr;
+          </button>
+        </div>
+      </div>
+
+      <!-- EQUACIÓ QUÍMICA INTERACTIVA -->
+      <div class="py-6 px-2 sm:px-6 rounded-2xl border my-4 shadow-inner eq-box">
+        <p class="text-xs font-semibold uppercase tracking-widest text-center mb-4" style="color: var(--text-muted)">
+          Introdueix els coeficients estequiomètrics (Les caselles en blanc compten com a 1)
+        </p>
+        
+        <div id="equationContainer" class="flex flex-wrap items-center justify-center gap-2 sm:gap-4 text-lg sm:text-2xl font-bold font-mono py-2">
+          <!-- Generat dinàmicament -->
+        </div>
+      </div>
+
+      <!-- BOTONS D'ACCIÓ -->
+      <div class="flex flex-wrap items-center justify-between gap-3 mt-6">
+        <button onclick="showHint()" class="px-4 py-2.5 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 text-amber-600 dark:text-amber-300 border border-amber-500/30 font-semibold text-sm flex items-center space-x-2 transition">
+          <svg class="w-4 h-4 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path></svg>
+          <span>Pista / Consell</span>
+        </button>
+
+        <div class="flex items-center space-x-3">
+          <button onclick="clearInputs()" class="px-4 py-2.5 rounded-xl font-semibold text-sm border transition" style="background-color: var(--bg-input); border-color: var(--border-input); color: var(--text-main)">
+            Netejar
+          </button>
+          <button onclick="validateReaction()" class="px-6 py-2.5 rounded-xl bg-gradient-to-r from-teal-500 to-sky-500 hover:from-teal-400 hover:to-sky-400 text-slate-950 font-extrabold text-sm shadow-lg shadow-teal-500/25 transition transform active:scale-95 flex items-center space-x-2">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg>
+            <span>Validar Reacció</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- CAIXA DE PISTA -->
+      <div id="hintBox" class="hidden mt-4 p-4 rounded-xl bg-amber-500/10 border border-amber-500/40 text-amber-800 dark:text-amber-200 text-sm flex items-start space-x-3 transition">
+        <span class="text-amber-500 font-bold text-lg">💡</span>
+        <div>
+          <h4 class="font-bold mb-0.5">Consell per a aquesta reacció:</h4>
+          <p id="hintText" class="leading-relaxed"></p>
+        </div>
+      </div>
+
+      <!-- MISSATGE DE FEEDBACK -->
+      <div id="feedbackBox" class="hidden mt-4 p-4 rounded-xl text-sm font-semibold flex items-center space-x-3 transition border">
+        <span id="feedbackIcon" class="text-xl"></span>
+        <div id="feedbackText"></div>
+      </div>
+    </section>
+
+    <!-- TAULA DE BALANÇ D'ÀTOMS EN TEMPS REAL -->
+    <section class="glass-card rounded-2xl p-6 shadow-xl">
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="text-base font-bold flex items-center space-x-2">
+          <svg class="w-5 h-5 text-teal-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+          <span>Taula de Balanç d'Àtoms (Comptador dinàmic en temps real)</span>
+        </h3>
+        <span class="text-xs px-2.5 py-1 rounded-md border" style="background-color: var(--bg-input); border-color: var(--border-input); color: var(--text-muted)">Les caselles buides compten com a 1</span>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse">
+          <thead>
+            <tr class="border-b text-xs font-semibold uppercase tracking-wider" style="border-color: var(--border-card); color: var(--text-muted)">
+              <th class="py-3 px-4">Element Químic</th>
+              <th class="py-3 px-4 text-center">Àtoms Reactius (Esquerra)</th>
+              <th class="py-3 px-4 text-center">Estat de Balanç</th>
+              <th class="py-3 px-4 text-center">Àtoms Productes (Dreta)</th>
+            </tr>
+          </thead>
+          <tbody id="atomTableBody" class="divide-y font-mono text-sm" style="border-color: var(--border-card)">
+            <!-- Omplert per JS -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- REGISTRE D'ERRADES DE LA SESSIÓ -->
+    <section class="glass-card rounded-2xl p-6 shadow-xl">
+      <div class="flex items-center justify-between mb-4">
+        <div>
+          <h3 class="text-base font-bold flex items-center space-x-2">
+            <svg class="w-5 h-5 text-rose-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            <span>Llistat d'Errades de la Sessió</span>
+          </h3>
+          <p class="text-xs mt-0.5" style="color: var(--text-muted)">Registre d'intents fallits per analitzar i corregir.</p>
+        </div>
+        <button onclick="clearErrorLog()" id="clearErrorsBtn" class="hidden text-xs text-rose-500 hover:text-rose-400 underline">
+          Esborrar històric
+        </button>
+      </div>
+
+      <div id="errorLogContainer" class="space-y-3">
+        <p id="noErrorsText" class="text-sm italic py-4 text-center" style="color: var(--text-muted)">
+          Encara no has comès cap errada en aquesta sessió. Aconsegueix un balanç perfecte!
+        </p>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- PEU DE PÀGINA -->
+  <footer class="border-t py-6 text-center text-xs" style="background-color: var(--bg-card-solid); border-color: var(--border-card); color: var(--text-muted)">
+    <div class="max-w-7xl mx-auto px-4">
+      <p>Desenvolupat per a l'ensenyament de les Ciències (Física i Química - 1r de Batxillerat).</p>
+      <p class="mt-1">Compatible amb GitHub Pages &bull; Utilitza HTML5, Tailwind CSS, KaTeX i JavaScript autònom.</p>
+    </div>
+  </footer>
+
+  <!-- LÒGICA JAVASCRIPT -->
+  <script>
+    /* ==========================================================================
+       BASE DE DADES DE REACCIONS QUÍMIQUES PER TEMPTEIG (18 REACCIONS)
+       ========================================================================== */
+    const REACTIONS_DB = [
+      {
+        id: 1,
+        type: "Combustió (Metà)",
+        reactants: [
+          { formula: "CH_4", display: "CH₄", atoms: { C: 1, H: 4 } },
+          { formula: "O_2", display: "O₂", atoms: { O: 2 } }
+        ],
+        products: [
+          { formula: "CO_2", display: "CO₂", atoms: { C: 1, O: 2 } },
+          { formula: "H_2O", display: "H₂O", atoms: { H: 2, O: 1 } }
+        ],
+        hint: "Comença pel Carboni (1 àtom a cada banda). Segueix per l'Hidrogen (4 als reactius, per tant cal un 2 a l'H₂O). Finalment ajusta l'O₂."
+      },
+      {
+        id: 2,
+        type: "Combustió (Età - Amb Fracció)",
+        reactants: [
+          { formula: "C_2H_6", display: "C₂H₆", atoms: { C: 2, H: 6 } },
+          { formula: "O_2", display: "O₂", atoms: { O: 2 } }
+        ],
+        products: [
+          { formula: "CO_2", display: "CO₂", atoms: { C: 1, O: 2 } },
+          { formula: "H_2O", display: "H₂O", atoms: { H: 2, O: 1 } }
+        ],
+        hint: "Ajusta 2 CO₂ i 3 H₂O. Als productes sumes 2·2 + 3·1 = 7 àtoms d'Òxigen. Utilitza la fracció 7/2 davant de l'O₂!"
+      },
+      {
+        id: 3,
+        type: "Combustió (Propà)",
+        reactants: [
+          { formula: "C_3H_8", display: "C₃H₈", atoms: { C: 3, H: 8 } },
+          { formula: "O_2", display: "O₂", atoms: { O: 2 } }
+        ],
+        products: [
+          { formula: "CO_2", display: "CO₂", atoms: { C: 1, O: 2 } },
+          { formula: "H_2O", display: "H₂O", atoms: { H: 2, O: 1 } }
+        ],
+        hint: "Ajusta 3 CO₂ i 4 H₂O. Tens un total de 10 àtoms d'òxigen a la dreta (3x2 + 4x1 = 10). El coeficient de l'O₂ serà 5."
+      },
+      {
+        id: 4,
+        type: "Combustió (Butà - Fracció 13/2)",
+        reactants: [
+          { formula: "C_4H_{10}", display: "C₄H₁₀", atoms: { C: 4, H: 10 } },
+          { formula: "O_2", display: "O₂", atoms: { O: 2 } }
+        ],
+        products: [
+          { formula: "CO_2", display: "CO₂", atoms: { C: 1, O: 2 } },
+          { formula: "H_2O", display: "H₂O", atoms: { H: 2, O: 1 } }
+        ],
+        hint: "Ajusta 4 CO₂ i 5 H₂O. Tens 4x2 + 5x1 = 13 àtoms d'òxigen a la dreta. Escriu la fracció 13/2 davant de l'O₂."
+      },
+      {
+        id: 5,
+        type: "Combustió (Etè)",
+        reactants: [
+          { formula: "C_2H_4", display: "C₂H₄", atoms: { C: 2, H: 4 } },
+          { formula: "O_2", display: "O₂", atoms: { O: 2 } }
+        ],
+        products: [
+          { formula: "CO_2", display: "CO₂", atoms: { C: 1, O: 2 } },
+          { formula: "H_2O", display: "H₂O", atoms: { H: 2, O: 1 } }
+        ],
+        hint: "Posa 2 a CO₂ i 2 a H₂O. Comptabilitza els àtoms d'òxigen a la dreta (4 + 2 = 6) i col·loca un 3 a l'O₂."
+      },
+      {
+        id: 6,
+        type: "Combustió (Etanol)",
+        reactants: [
+          { formula: "C_2H_5OH", display: "C₂H₅OH", atoms: { C: 2, H: 6, O: 1 } },
+          { formula: "O_2", display: "O₂", atoms: { O: 2 } }
+        ],
+        products: [
+          { formula: "CO_2", display: "CO₂", atoms: { C: 1, O: 2 } },
+          { formula: "H_2O", display: "H₂O", atoms: { H: 2, O: 1 } }
+        ],
+        hint: "Compte: l'etanol té 6 H en total i ja inclou 1 àtom d'O. Ajusta 2 CO₂ i 3 H₂O (7 O a la dreta). Resta 1 O de l'etanol -> queden 6 O per a l'O₂ (3 O₂)."
+      },
+      {
+        id: 7,
+        type: "Síntesi (Amoníac)",
+        reactants: [
+          { formula: "N_2", display: "N₂", atoms: { N: 2 } },
+          { formula: "H_2", display: "H₂", atoms: { H: 2 } }
+        ],
+        products: [
+          { formula: "NH_3", display: "NH₃", atoms: { N: 1, H: 3 } }
+        ],
+        hint: "Si mantens 1 N₂, tindràs 2 NH₃ a la dreta. Això fa 6 H en total, així que caldrà un 3 davant de l'H₂."
+      },
+      {
+        id: 8,
+        type: "Síntesi (Aigua - Amb Fracció)",
+        reactants: [
+          { formula: "H_2", display: "H₂", atoms: { H: 2 } },
+          { formula: "O_2", display: "O₂", atoms: { O: 2 } }
+        ],
+        products: [
+          { formula: "H_2O", display: "H₂O", atoms: { H: 2, O: 1 } }
+        ],
+        hint: "Pots fer servir la fracció 1/2 davant de l'O₂ per obtenir 1 àtom d'O, o duplicar tots els coeficients (2, 1, 2)."
+      },
+      {
+        id: 9,
+        type: "Síntesi (Òxid de Ferro III)",
+        reactants: [
+          { formula: "Fe", display: "Fe", atoms: { Fe: 1 } },
+          { formula: "O_2", display: "O₂", atoms: { O: 2 } }
+        ],
+        products: [
+          { formula: "Fe_2O_3", display: "Fe₂O₃", atoms: { Fe: 2, O: 3 } }
+        ],
+        hint: "Als productes hi ha 2 Fe i 3 O. Pots posar 2 al Fe i la fracció 3/2 a l'O₂ (o bé 4 Fe, 3 O₂ i 2 Fe₂O₃)."
+      },
+      {
+        id: 10,
+        type: "Descomposició (Clorat de Potassi)",
+        reactants: [
+          { formula: "KClO_3", display: "KClO₃", atoms: { K: 1, Cl: 1, O: 3 } }
+        ],
+        products: [
+          { formula: "KCl", display: "KCl", atoms: { K: 1, Cl: 1 } },
+          { formula: "O_2", display: "O₂", atoms: { O: 2 } }
+        ],
+        hint: "El K i el Cl ja estan igualats. Com que hi ha 3 O a l'esquerra i 2 a la dreta, utilitza la fracció 3/2 davant de l'O₂."
+      },
+      {
+        id: 11,
+        type: "Descomposició (Calcària)",
+        reactants: [
+          { formula: "CaCO_3", display: "CaCO₃", atoms: { Ca: 1, C: 1, O: 3 } }
+        ],
+        products: [
+          { formula: "CaO", display: "CaO", atoms: { Ca: 1, O: 1 } },
+          { formula: "CO_2", display: "CO₂", atoms: { C: 1, O: 2 } }
+        ],
+        hint: "Comprova els àtoms: 1 Ca, 1 C i 3 O a cada costat. Pots deixar les caselles en blanc (equival a 1)."
+      },
+      {
+        id: 12,
+        type: "Desplaçament (Sodi i Aigua)",
+        reactants: [
+          { formula: "Na", display: "Na", atoms: { Na: 1 } },
+          { formula: "H_2O", display: "H₂O", atoms: { H: 2, O: 1 } }
+        ],
+        products: [
+          { formula: "NaOH", display: "NaOH", atoms: { Na: 1, O: 1, H: 1 } },
+          { formula: "H_2", display: "H₂", atoms: { H: 2 } }
+        ],
+        hint: "A la dreta tens 3 H en total (1 a NaOH + 2 a H₂). Utilitza la fracció 1/2 davant de l'H₂ per tenir exactament 2 H."
+      },
+      {
+        id: 13,
+        type: "Desplaçament (Magnesi i Àcid Clorhídric)",
+        reactants: [
+          { formula: "Mg", display: "Mg", atoms: { Mg: 1 } },
+          { formula: "HCl", display: "HCl", atoms: { H: 1, Cl: 1 } }
+        ],
+        products: [
+          { formula: "MgCl_2", display: "MgCl₂", atoms: { Mg: 1, Cl: 2 } },
+          { formula: "H_2", display: "H₂", atoms: { H: 2 } }
+        ],
+        hint: "Fixa't en el MgCl₂ (2 Cl) i en l'H₂ (2 H). Col·locant un 2 davant de l'HCl la reacció queda perfectament ajustada."
+      },
+      {
+        id: 14,
+        type: "Desplaçament (Alumini i Àcid Clorhídric)",
+        reactants: [
+          { formula: "Al", display: "Al", atoms: { Al: 1 } },
+          { formula: "HCl", display: "HCl", atoms: { H: 1, Cl: 1 } }
+        ],
+        products: [
+          { formula: "AlCl_3", display: "AlCl₃", atoms: { Al: 1, Cl: 3 } },
+          { formula: "H_2", display: "H₂", atoms: { H: 2 } }
+        ],
+        hint: "Si posis 3 a HCl per als 3 Cl, tindràs 3 H. Per tant, posa la fracció 3/2 davant de l'H₂!"
+      },
+      {
+        id: 15,
+        type: "Síntesi (Triòxid de Sofre)",
+        reactants: [
+          { formula: "SO_2", display: "SO₂", atoms: { S: 1, O: 2 } },
+          { formula: "O_2", display: "O₂", atoms: { O: 2 } }
+        ],
+        products: [
+          { formula: "SO_3", display: "SO₃", atoms: { S: 1, O: 3 } }
+        ],
+        hint: "El sofre ja està equilibrat (1 a cada costat). Per a l'òxigen: tens 2 a SO₂. Necessites 1 àtom més de l'O₂, així que posa la fracció 1/2 a l'O₂."
+      },
+      {
+        id: 16,
+        type: "Reacció Carbonat i Àcid (Sodi i HCl)",
+        reactants: [
+          { formula: "Na_2CO_3", display: "Na₂CO₃", atoms: { Na: 2, C: 1, O: 3 } },
+          { formula: "HCl", display: "HCl", atoms: { H: 1, Cl: 1 } }
+        ],
+        products: [
+          { formula: "NaCl", display: "NaCl", atoms: { Na: 1, Cl: 1 } },
+          { formula: "H_2O", display: "H₂O", atoms: { H: 2, O: 1 } },
+          { formula: "CO_2", display: "CO₂", atoms: { C: 1, O: 2 } }
+        ],
+        hint: "Ajusta 2 Na a NaCl. Això dona 2 Cl, per tant cal un 2 a HCl. Comprova l'H i l'O: queden automàticament equilibrats!"
+      },
+      {
+        id: 17,
+        type: "Desplaçament (Zinc i HCl)",
+        reactants: [
+          { formula: "Zn", display: "Zn", atoms: { Zn: 1 } },
+          { formula: "HCl", display: "HCl", atoms: { H: 1, Cl: 1 } }
+        ],
+        products: [
+          { formula: "ZnCl_2", display: "ZnCl₂", atoms: { Zn: 1, Cl: 2 } },
+          { formula: "H_2", display: "H₂", atoms: { H: 2 } }
+        ],
+        hint: "Només cal un 2 davant de l'HCl per equilibrar els 2 Cl del ZnCl₂ i els 2 H de l'H₂."
+      },
+      {
+        id: 18,
+        type: "Desplaçament (Ferro i Àcid Sulfúric)",
+        reactants: [
+          { formula: "Fe", display: "Fe", atoms: { Fe: 1 } },
+          { formula: "H_2SO_4", display: "H₂SO₄", atoms: { H: 2, S: 1, O: 4 } }
+        ],
+        products: [
+          { formula: "FeSO_4", display: "FeSO₄", atoms: { Fe: 1, S: 1, O: 4 } },
+          { formula: "H_2", display: "H₂", atoms: { H: 2 } }
+        ],
+        hint: "Tots els elements estan equilibrats directament 1 a 1. Deixa totes les caselles en blanc!"
+      }
+    ];
+
+    /* ==========================================================================
+       ESTAT GLOBAL
+       ========================================================================== */
+    let currentIdx = 0;
+    let completedSet = new Set();
+    let correctCount = 0;
+    let errorCount = 0;
+    let errorLog = [];
+
+    /* ==========================================================================
+       PARSEJADOR DE FRACCIONS I COEFICIENTS (MODIFICACIÓ 1: EN BLANC = 1)
+       ========================================================================== */
+    /**
+     * Si la cadena està buida o té només espais, RETORNA 1 PER DEFECTE.
+     * Si conté una fracció (ex. "3/2"), divideix numerador per denominador.
+     * Si conté un número decimal o enter, el converteix a float.
+     */
+    function parseFractionOrNumber(str) {
+      if (str === undefined || str === null) return 1;
+      const clean = str.toString().trim().replace(',', '.');
+      if (clean === '') return 1; // MODIFICACIÓ 1: Si està en blanc, es considera 1
+
+      if (clean.includes('/')) {
+        const parts = clean.split('/');
+        if (parts.length !== 2) return NaN;
+        const num = parseFloat(parts[0]);
+        const den = parseFloat(parts[1]);
+        if (isNaN(num) || isNaN(den) || den === 0) return NaN;
+        return num / den;
+      }
+
+      const val = parseFloat(clean);
+      return isNaN(val) ? NaN : val;
+    }
+
+    /**
+     * Formatació de fòrmules químiques amb subíndexs HTML
+     */
+    function formatFormulaHTML(formulaStr) {
+      return formulaStr.replace(/([A-Za-z\)])(\d+)/g, '$1<sub>$2</sub>');
+    }
+
+    /* ==========================================================================
+       COMMUTADOR MODE FOSC / MODE LLUMINÓS (MODIFICACIÓ 2)
+       ========================================================================== */
+    function toggleTheme() {
+      const htmlEl = document.documentElement;
+      const currentTheme = htmlEl.getAttribute('data-theme') || 'dark';
+      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      
+      htmlEl.setAttribute('data-theme', newTheme);
+      if (newTheme === 'dark') {
+        htmlEl.classList.add('dark');
+      } else {
+        htmlEl.classList.remove('dark');
+      }
+
+      updateThemeUI(newTheme);
+      localStorage.setItem('chemistry_app_theme', newTheme);
+    }
+
+    function updateThemeUI(theme) {
+      const icon = document.getElementById('themeIcon');
+      const text = document.getElementById('themeText');
+      if (theme === 'light') {
+        icon.innerText = '🌙';
+        text.innerText = 'Mode Fosc';
+      } else {
+        icon.innerText = '☀️';
+        text.innerText = 'Mode Lluminós';
+      }
+    }
+
+    // Carregar tema preferit previ
+    function initTheme() {
+      const savedTheme = localStorage.getItem('chemistry_app_theme') || 'dark';
+      document.documentElement.setAttribute('data-theme', savedTheme);
+      if (savedTheme === 'dark') {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+      updateThemeUI(savedTheme);
+    }
+
+    /* ==========================================================================
+       INICIALITZACIÓ I CARREGA DE REACCIÓ
+       ========================================================================== */
+    window.addEventListener('DOMContentLoaded', () => {
+      initTheme();
+      document.getElementById('statTotal').innerText = REACTIONS_DB.length;
+      document.getElementById('totalIdxText').innerText = REACTIONS_DB.length;
+      loadReaction(0);
+    });
+
+    function loadReaction(index) {
+      currentIdx = index;
+      const rxn = REACTIONS_DB[currentIdx];
+
+      document.getElementById('reactionTypeBadge').innerText = rxn.type;
+      document.getElementById('currentIdxText').innerText = currentIdx + 1;
+
+      document.getElementById('hintBox').classList.add('hidden');
+      document.getElementById('feedbackBox').classList.add('hidden');
+
+      const container = document.getElementById('equationContainer');
+      container.innerHTML = '';
+
+      // Renderitzat Reactius
+      rxn.reactants.forEach((r, i) => {
+        if (i > 0) {
+          const plus = document.createElement('span');
+          plus.className = 'text-teal-500 font-bold mx-1';
+          plus.innerText = '+';
+          container.appendChild(plus);
+        }
+
+        const wrap = document.createElement('div');
+        wrap.className = 'flex items-center space-x-1.5';
+
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.className = 'coeff-input rounded-xl';
+        input.placeholder = '1'; // Placeholder educatiu que indica que buit = 1
+        input.dataset.type = 'reactant';
+        input.dataset.index = i;
+        input.addEventListener('input', updateLiveAtomTable);
+
+        const formSpan = document.createElement('span');
+        formSpan.className = 'font-semibold text-xl sm:text-2xl tracking-wide';
+        formSpan.innerHTML = formatFormulaHTML(r.display);
+
+        wrap.appendChild(input);
+        wrap.appendChild(formSpan);
+        container.appendChild(wrap);
+      });
+
+      // Fletxa de Reacció
+      const arrow = document.createElement('span');
+      arrow.className = 'text-sky-500 font-bold mx-2 text-2xl sm:text-3xl';
+      arrow.innerHTML = '&rarr;';
+      container.appendChild(arrow);
+
+      // Renderitzat Productes
+      rxn.products.forEach((p, i) => {
+        if (i > 0) {
+          const plus = document.createElement('span');
+          plus.className = 'text-teal-500 font-bold mx-1';
+          plus.innerText = '+';
+          container.appendChild(plus);
+        }
+
+        const wrap = document.createElement('div');
+        wrap.className = 'flex items-center space-x-1.5';
+
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.className = 'coeff-input rounded-xl';
+        input.placeholder = '1';
+        input.dataset.type = 'product';
+        input.dataset.index = i;
+        input.addEventListener('input', updateLiveAtomTable);
+
+        const formSpan = document.createElement('span');
+        formSpan.className = 'font-semibold text-xl sm:text-2xl tracking-wide';
+        formSpan.innerHTML = formatFormulaHTML(p.display);
+
+        wrap.appendChild(input);
+        wrap.appendChild(formSpan);
+        container.appendChild(wrap);
+      });
+
+      if (window.renderMathInElement) {
+        renderMathInElement(document.body, {
+          delimiters: [
+            {left: '$$', right: '$$', display: true},
+            {left: '$', right: '$', display: false}
+          ],
+          throwOnError: false
+        });
+      }
+
+      updateLiveAtomTable();
+    }
+
+    /* ==========================================================================
+       TAULA DE BALANÇ D'ÀTOMS EN TEMPS REAL
+       ========================================================================== */
+    function updateLiveAtomTable() {
+      const rxn = REACTIONS_DB[currentIdx];
+      const inputs = document.querySelectorAll('#equationContainer input');
+
+      const elementSet = new Set();
+      rxn.reactants.forEach(r => Object.keys(r.atoms).forEach(e => elementSet.add(e)));
+      rxn.products.forEach(p => Object.keys(p.atoms).forEach(e => elementSet.add(e)));
+      const elements = Array.from(elementSet);
+
+      const reactantCoeffs = [];
+      const productCoeffs = [];
+
+      inputs.forEach(inp => {
+        // Obtenir valor (si està en blanc, parseFractionOrNumber retorna 1)
+        const val = parseFractionOrNumber(inp.value);
+        const coeff = isNaN(val) || val <= 0 ? 1 : val;
+
+        if (inp.dataset.type === 'reactant') {
+          reactantCoeffs[parseInt(inp.dataset.index)] = coeff;
+        } else {
+          productCoeffs[parseInt(inp.dataset.index)] = coeff;
+        }
+      });
+
+      const tbody = document.getElementById('atomTableBody');
+      tbody.innerHTML = '';
+
+      elements.forEach(elem => {
+        let leftAtoms = 0;
+        rxn.reactants.forEach((r, idx) => {
+          leftAtoms += (r.atoms[elem] || 0) * (reactantCoeffs[idx] || 1);
+        });
+
+        let rightAtoms = 0;
+        rxn.products.forEach((p, idx) => {
+          rightAtoms += (p.atoms[elem] || 0) * (productCoeffs[idx] || 1);
+        });
+
+        const isBalanced = Math.abs(leftAtoms - rightAtoms) < 0.0001;
+        const formatVal = (v) => Number.isInteger(v) ? v : v.toFixed(2).replace(/\.00$/, '');
+
+        const row = document.createElement('tr');
+        row.style.borderBottom = '1px solid var(--border-card)';
+        row.innerHTML = `
+          <td class="py-3 px-4 font-bold text-teal-600 dark:text-teal-300 flex items-center space-x-2">
+            <span class="w-2.5 h-2.5 rounded-full ${isBalanced ? 'bg-emerald-500' : 'bg-rose-500'}"></span>
+            <span>${elem}</span>
+          </td>
+          <td class="py-3 px-4 text-center font-bold">
+            ${formatVal(leftAtoms)}
+          </td>
+          <td class="py-3 px-4 text-center">
+            ${isBalanced 
+                ? '<span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold bg-emerald-500/10 text-emerald-500 border border-emerald-500/20">Equilibrat ✓</span>' 
+                : '<span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold bg-rose-500/10 text-rose-500 border border-rose-500/20">Desequilibrat &ne;</span>'
+            }
+          </td>
+          <td class="py-3 px-4 text-center font-bold">
+            ${formatVal(rightAtoms)}
+          </td>
+        `;
+        tbody.appendChild(row);
+      });
+    }
+
+    /* ==========================================================================
+       VALIDACIÓ DE LA REACCIÓ I AVALUACIÓ DE CONSERVACIÓ DE MASSA
+       ========================================================================== */
+    function validateReaction() {
+      const rxn = REACTIONS_DB[currentIdx];
+      const inputs = document.querySelectorAll('#equationContainer input');
+      const feedbackBox = document.getElementById('feedbackBox');
+      const feedbackIcon = document.getElementById('feedbackIcon');
+      const feedbackText = document.getElementById('feedbackText');
+
+      let hasInvalidFormat = false;
+      const userCoeffsDisplay = [];
+      const reactantCoeffs = [];
+      const productCoeffs = [];
+
+      inputs.forEach(inp => {
+        const raw = inp.value.trim();
+        const val = parseFractionOrNumber(raw);
+
+        // Si l'usuari ha escrit un format invàlid (no és número/fracció o és <= 0)
+        if (isNaN(val) || val <= 0) {
+          hasInvalidFormat = true;
+        }
+
+        userCoeffsDisplay.push(raw === '' ? '1 (buit)' : raw);
+
+        if (inp.dataset.type === 'reactant') {
+          reactantCoeffs[parseInt(inp.dataset.index)] = val;
+        } else {
+          productCoeffs[parseInt(inp.dataset.index)] = val;
+        }
+      });
+
+      feedbackBox.classList.remove('hidden', 'bg-emerald-500/10', 'border-emerald-500/40', 'text-emerald-700', 'dark:text-emerald-300', 'bg-rose-500/10', 'border-rose-500/40', 'text-rose-700', 'dark:text-rose-300', 'bg-amber-500/10', 'border-amber-500/40', 'text-amber-700', 'dark:text-amber-300');
+
+      if (hasInvalidFormat) {
+        feedbackBox.classList.add('bg-amber-500/10', 'border-amber-500/40', 'text-amber-700', 'dark:text-amber-300');
+        feedbackIcon.innerText = '⚠️';
+        feedbackText.innerHTML = "Has introduit un valor no vàlid. Escriu números positius (ex. <code>1</code>, <code>2</code>) o fraccions (ex. <code>3/2</code>, <code>7/2</code>).";
+        return;
+      }
+
+      // Verificació d'àtoms totals (Llei de Lavoisier)
+      const elementSet = new Set();
+      rxn.reactants.forEach(r => Object.keys(r.atoms).forEach(e => elementSet.add(e)));
+      rxn.products.forEach(p => Object.keys(p.atoms).forEach(e => elementSet.add(e)));
+
+      let isCorrect = true;
+      let imbalanceDetails = [];
+
+      elementSet.forEach(elem => {
+        let leftAtoms = 0;
+        rxn.reactants.forEach((r, idx) => {
+          leftAtoms += (r.atoms[elem] || 0) * reactantCoeffs[idx];
+        });
+
+        let rightAtoms = 0;
+        rxn.products.forEach((p, idx) => {
+          rightAtoms += (p.atoms[elem] || 0) * productCoeffs[idx];
+        });
+
+        if (Math.abs(leftAtoms - rightAtoms) > 0.0001) {
+          isCorrect = false;
+          const formatVal = (v) => Number.isInteger(v) ? v : v.toFixed(2).replace(/\.00$/, '');
+          imbalanceDetails.push(`${elem}: ${formatVal(leftAtoms)} esquerra vs ${formatVal(rightAtoms)} dreta`);
+        }
+      });
+
+      if (isCorrect) {
+        feedbackBox.classList.add('bg-emerald-500/10', 'border-emerald-500/40', 'text-emerald-700', 'dark:text-emerald-300');
+        feedbackIcon.innerText = '🎉';
+        feedbackText.innerHTML = `<strong>Excel·lent! Reacció perfectament ajustada.</strong> Compleix la Llei de Conservació de la Massa de Lavoisier.`;
+
+        if (!completedSet.has(currentIdx)) {
+          completedSet.add(currentIdx);
+          correctCount++;
+        }
+      } else {
+        feedbackBox.classList.add('bg-rose-500/10', 'border-rose-500/40', 'text-rose-700', 'dark:text-rose-300');
+        feedbackIcon.innerText = '❌';
+        feedbackText.innerHTML = `<strong>Reacció no equilibrada.</strong> Desequilibris: (${imbalanceDetails.join(', ')}). Revisa la taula de balanç!`;
+
+        errorCount++;
+        logErrorAttempt(rxn, userCoeffsDisplay, imbalanceDetails.join(', '));
+      }
+
+      updateStats();
+    }
+
+    /* ==========================================================================
+       REGISTRE D'ERRADES I ESTADÍSTIQUES
+       ========================================================================== */
+    function logErrorAttempt(rxn, coeffsArray, imbalanceStr) {
+      const errorItem = {
+        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
+        reactionName: rxn.type,
+        equation: rxn.reactants.map(r=>r.display).join(' + ') + ' → ' + rxn.products.map(p=>p.display).join(' + '),
+        userCoeffs: coeffsArray.join(' : '),
+        imbalance: imbalanceStr
+      };
+
+      errorLog.unshift(errorItem);
+      renderErrorLog();
+    }
+
+    function renderErrorLog() {
+      const container = document.getElementById('errorLogContainer');
+      const noErrorsText = document.getElementById('noErrorsText');
+      const clearBtn = document.getElementById('clearErrorsBtn');
+
+      if (errorLog.length === 0) {
+        noErrorsText.classList.remove('hidden');
+        clearBtn.classList.add('hidden');
+        container.innerHTML = '';
+        container.appendChild(noErrorsText);
+        return;
+      }
+
+      noErrorsText.classList.add('hidden');
+      clearBtn.classList.remove('hidden');
+      container.innerHTML = '';
+
+      errorLog.forEach((item, i) => {
+        const div = document.createElement('div');
+        div.className = 'p-3.5 rounded-xl border flex flex-wrap items-center justify-between gap-3 text-xs';
+        div.style.backgroundColor = 'var(--bg-eq-box)';
+        div.style.borderColor = 'var(--border-card)';
+
+        div.innerHTML = `
+          <div class="space-y-1">
+            <div class="flex items-center space-x-2">
+              <span class="px-2 py-0.5 bg-rose-500/10 text-rose-500 font-mono font-bold rounded">Intent ${errorLog.length - i}</span>
+              <span class="font-bold">${item.reactionName}</span>
+              <span class="font-mono text-xs" style="color: var(--text-muted)">${item.time}</span>
+            </div>
+            <p class="font-mono text-sm">${item.equation}</p>
+          </div>
+          <div class="text-right space-y-1">
+            <p class="font-mono text-amber-600 dark:text-amber-300">Coeficients: <strong>[ ${item.userCoeffs} ]</strong></p>
+            <p class="font-mono text-rose-500 text-xs">${item.imbalance}</p>
+          </div>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    function clearErrorLog() {
+      errorLog = [];
+      renderErrorLog();
+    }
+
+    function updateStats() {
+      document.getElementById('statCompleted').innerText = completedSet.size;
+      document.getElementById('statCorrect').innerText = correctCount;
+      document.getElementById('statErrors').innerText = errorCount;
+
+      const totalAttempts = correctCount + errorCount;
+      const percentage = totalAttempts === 0 ? 100 : Math.round((correctCount / totalAttempts) * 100);
+      
+      document.getElementById('statPercent').innerText = `${percentage}%`;
+      
+      const progress = (completedSet.size / REACTIONS_DB.length) * 100;
+      document.getElementById('progressBar').style.width = `${progress}%`;
+    }
+
+    /* ==========================================================================
+       NAVEGACIÓ
+       ========================================================================== */
+    function nextReaction() {
+      loadReaction((currentIdx + 1) % REACTIONS_DB.length);
+    }
+
+    function prevReaction() {
+      loadReaction((currentIdx - 1 + REACTIONS_DB.length) % REACTIONS_DB.length);
+    }
+
+    function randomReaction() {
+      let rand;
+      do {
+        rand = Math.floor(Math.random() * REACTIONS_DB.length);
+      } while (rand === currentIdx && REACTIONS_DB.length > 1);
+      loadReaction(rand);
+    }
+
+    function clearInputs() {
+      const inputs = document.querySelectorAll('#equationContainer input');
+      inputs.forEach(i => i.value = '');
+      document.getElementById('feedbackBox').classList.add('hidden');
+      document.getElementById('hintBox').classList.add('hidden');
+      updateLiveAtomTable();
+    }
+
+    function showHint() {
+      const hintBox = document.getElementById('hintBox');
+      const hintText = document.getElementById('hintText');
+      const rxn = REACTIONS_DB[currentIdx];
+
+      hintText.innerText = rxn.hint;
+      hintBox.classList.remove('hidden');
+
+      if (window.renderMathInElement) {
+        renderMathInElement(hintBox, {
+          delimiters: [{left: '$', right: '$', display: false}],
+          throwOnError: false
+        });
+      }
+    }
+
+    function toggleGuide() {
+      document.getElementById('guideSection').classList.toggle('hidden');
+    }
+  </script>
+</body>
+</html>
