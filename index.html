@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ajustament de Reaccions Químiques | 1r de Batxillerat</title>
+  <title>Ajustament de Reaccions Químiques | IES Algarb</title>
   
   <!-- Favicon SVG -->
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
@@ -14,7 +14,6 @@
   <!-- KaTeX per al renderitzat de fòrmules i equacions -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
-  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
 
   <!-- Google Fonts: Inter & JetBrains Mono -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -123,7 +122,7 @@
 </head>
 <body class="min-h-screen flex flex-col font-sans antialiased">
 
-  <!-- CAPÇALERA AMB COMMUTADOR DE TEMA -->
+  <!-- CAPÇALERA AMB COMMUTADOR DE TEMA I NOM DEL CENTRE -->
   <header class="border-b sticky top-0 z-50 backdrop-blur-md" style="background-color: var(--bg-header); border-color: var(--border-card);">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex flex-wrap items-center justify-between gap-4">
       <div class="flex items-center space-x-3">
@@ -134,7 +133,8 @@
           </svg>
         </div>
         <div>
-          <h1 class="text-xl font-bold bg-gradient-to-r from-teal-500 via-sky-500 to-cyan-400 bg-clip-text text-transparent">
+          <span class="text-[11px] font-bold uppercase tracking-wider text-teal-500 block leading-none mb-0.5">IES Algarb</span>
+          <h1 class="text-xl font-bold bg-gradient-to-r from-teal-500 via-sky-500 to-cyan-400 bg-clip-text text-transparent leading-tight">
             Ajustament de Reaccions Químiques
           </h1>
           <p class="text-xs font-medium" style="color: var(--text-muted)">
@@ -176,15 +176,15 @@
           <h3 class="font-semibold text-sky-500 dark:text-sky-300 mb-1">Passos Recomanats per Tempteig:</h3>
           <ol class="list-decimal list-inside space-y-1.5">
             <li>Ajusta primer els elements que només apareixen en <strong>un únic compost</strong> a cada costat (ex. Carboni, Metalls).</li>
-            <li>Ajusta posteriorment l'<strong>Hidrogen</strong> ($H$).</li>
-            <li>Deixa per al final l'<strong>Òxigen</strong> ($O_2$), ja que sol estar en estat elemental gasós i és més fàcil d'equilibrar.</li>
+            <li>Ajusta posteriorment l'<strong>Hidrogen</strong> (<span class="katex-inline" data-tex="\text{H}"></span>).</li>
+            <li>Deixa per al final l'<strong>Oxigen</strong> (<span class="katex-inline" data-tex="\text{O}_2"></span>), ja que sol estar en estat elemental gasós i és més fàcil d'equilibrar.</li>
             <li>Si no escrius cap número en una casella, el sistema interpreta automàticament un <strong>1</strong>.</li>
           </ol>
         </div>
         <div>
           <h3 class="font-semibold text-sky-500 dark:text-sky-300 mb-1">Ús de Fraccions i Caselles en Blanc:</h3>
           <p class="mb-2">
-            A 1r de Batxillerat, en processós com la termoquímica, s'utilitzen coeficients fraccionaris com <code class="px-1.5 py-0.5 rounded text-amber-500 font-mono" style="background-color: var(--bg-input)">1/2</code>, <code class="px-1.5 py-0.5 rounded text-amber-500 font-mono" style="background-color: var(--bg-input)">3/2</code> o <code class="px-1.5 py-0.5 rounded text-amber-500 font-mono" style="background-color: var(--bg-input)">7/2</code> davant de molècules diatòmiques.
+            A 1r de Batxillerat, en processos com la termoquímica, s'utilitzen coeficients fraccionaris com <code class="px-1.5 py-0.5 rounded text-amber-500 font-mono" style="background-color: var(--bg-input)">1/2</code>, <code class="px-1.5 py-0.5 rounded text-amber-500 font-mono" style="background-color: var(--bg-input)">3/2</code> o <code class="px-1.5 py-0.5 rounded text-amber-500 font-mono" style="background-color: var(--bg-input)">7/2</code> davant de molècules diatòmiques.
           </p>
           <p class="text-xs italic" style="color: var(--text-muted)">
             *Nota: Pots deixar les caselles en blanc (equival a 1) o introduir nombres enters o fraccions dividides per la barra "/".
@@ -360,13 +360,32 @@
   <!-- PEU DE PÀGINA -->
   <footer class="border-t py-6 text-center text-xs" style="background-color: var(--bg-card-solid); border-color: var(--border-card); color: var(--text-muted)">
     <div class="max-w-7xl mx-auto px-4">
-      <p>Desenvolupat per a l'ensenyament de les Ciències (Física i Química - 1r de Batxillerat).</p>
+      <p><strong>IES Algarb</strong> &bull; Desenvolupat per a l'ensenyament de les Ciències (Física i Química - 1r de Batxillerat).</p>
       <p class="mt-1">Compatible amb GitHub Pages &bull; Utilitza HTML5, Tailwind CSS, KaTeX i JavaScript autònom.</p>
     </div>
   </footer>
 
   <!-- LÒGICA JAVASCRIPT -->
   <script>
+    /* ==========================================================================
+       FUNCIONS D'INVOLUCRACIÓ DE KATEX (mInline)
+       ========================================================================== */
+    function mInline(texString, targetElement) {
+      if (window.katex && targetElement) {
+        katex.render(texString, targetElement, {
+          displayMode: false,
+          throwOnError: false
+        });
+      }
+    }
+
+    function renderAllKaTeXElements() {
+      document.querySelectorAll('.katex-inline').forEach(el => {
+        const tex = el.getAttribute('data-tex');
+        if (tex) mInline(tex, el);
+      });
+    }
+
     /* ==========================================================================
        BASE DE DADES DE REACCIONS QUÍMIQUES PER TEMPTEIG (18 REACCIONS)
        ========================================================================== */
@@ -375,12 +394,12 @@
         id: 1,
         type: "Combustió (Metà)",
         reactants: [
-          { formula: "CH_4", display: "CH₄", atoms: { C: 1, H: 4 } },
-          { formula: "O_2", display: "O₂", atoms: { O: 2 } }
+          { formula: "\\text{CH}_4", display: "CH₄", atoms: { C: 1, H: 4 } },
+          { formula: "\\text{O}_2", display: "O₂", atoms: { O: 2 } }
         ],
         products: [
-          { formula: "CO_2", display: "CO₂", atoms: { C: 1, O: 2 } },
-          { formula: "H_2O", display: "H₂O", atoms: { H: 2, O: 1 } }
+          { formula: "\\text{CO}_2", display: "CO₂", atoms: { C: 1, O: 2 } },
+          { formula: "\\text{H}_2\\text{O}", display: "H₂O", atoms: { H: 2, O: 1 } }
         ],
         hint: "Comença pel Carboni (1 àtom a cada banda). Segueix per l'Hidrogen (4 als reactius, per tant cal un 2 a l'H₂O). Finalment ajusta l'O₂."
       },
@@ -388,64 +407,64 @@
         id: 2,
         type: "Combustió (Età - Amb Fracció)",
         reactants: [
-          { formula: "C_2H_6", display: "C₂H₆", atoms: { C: 2, H: 6 } },
-          { formula: "O_2", display: "O₂", atoms: { O: 2 } }
+          { formula: "\\text{C}_2\\text{H}_6", display: "C₂H₆", atoms: { C: 2, H: 6 } },
+          { formula: "\\text{O}_2", display: "O₂", atoms: { O: 2 } }
         ],
         products: [
-          { formula: "CO_2", display: "CO₂", atoms: { C: 1, O: 2 } },
-          { formula: "H_2O", display: "H₂O", atoms: { H: 2, O: 1 } }
+          { formula: "\\text{CO}_2", display: "CO₂", atoms: { C: 1, O: 2 } },
+          { formula: "\\text{H}_2\\text{O}", display: "H₂O", atoms: { H: 2, O: 1 } }
         ],
-        hint: "Ajusta 2 CO₂ i 3 H₂O. Als productes sumes 2·2 + 3·1 = 7 àtoms d'Òxigen. Utilitza la fracció 7/2 davant de l'O₂!"
+        hint: "Ajusta 2 CO₂ i 3 H₂O. Als productes sumes 2·2 + 3·1 = 7 àtoms d'Oxigen. Utilitza la fracció 7/2 davant de l'O₂!"
       },
       {
         id: 3,
         type: "Combustió (Propà)",
         reactants: [
-          { formula: "C_3H_8", display: "C₃H₈", atoms: { C: 3, H: 8 } },
-          { formula: "O_2", display: "O₂", atoms: { O: 2 } }
+          { formula: "\\text{C}_3\\text{H}_8", display: "C₃H₈", atoms: { C: 3, H: 8 } },
+          { formula: "\\text{O}_2", display: "O₂", atoms: { O: 2 } }
         ],
         products: [
-          { formula: "CO_2", display: "CO₂", atoms: { C: 1, O: 2 } },
-          { formula: "H_2O", display: "H₂O", atoms: { H: 2, O: 1 } }
+          { formula: "\\text{CO}_2", display: "CO₂", atoms: { C: 1, O: 2 } },
+          { formula: "\\text{H}_2\\text{O}", display: "H₂O", atoms: { H: 2, O: 1 } }
         ],
-        hint: "Ajusta 3 CO₂ i 4 H₂O. Tens un total de 10 àtoms d'òxigen a la dreta (3x2 + 4x1 = 10). El coeficient de l'O₂ serà 5."
+        hint: "Ajusta 3 CO₂ i 4 H₂O. Tens un total de 10 àtoms d'oxigen a la dreta (3x2 + 4x1 = 10). El coeficient de l'O₂ serà 5."
       },
       {
         id: 4,
         type: "Combustió (Butà - Fracció 13/2)",
         reactants: [
-          { formula: "C_4H_{10}", display: "C₄H₁₀", atoms: { C: 4, H: 10 } },
-          { formula: "O_2", display: "O₂", atoms: { O: 2 } }
+          { formula: "\\text{C}_4\\text{H}_{10}", display: "C₄H₁₀", atoms: { C: 4, H: 10 } },
+          { formula: "\\text{O}_2", display: "O₂", atoms: { O: 2 } }
         ],
         products: [
-          { formula: "CO_2", display: "CO₂", atoms: { C: 1, O: 2 } },
-          { formula: "H_2O", display: "H₂O", atoms: { H: 2, O: 1 } }
+          { formula: "\\text{CO}_2", display: "CO₂", atoms: { C: 1, O: 2 } },
+          { formula: "\\text{H}_2\\text{O}", display: "H₂O", atoms: { H: 2, O: 1 } }
         ],
-        hint: "Ajusta 4 CO₂ i 5 H₂O. Tens 4x2 + 5x1 = 13 àtoms d'òxigen a la dreta. Escriu la fracció 13/2 davant de l'O₂."
+        hint: "Ajusta 4 CO₂ i 5 H₂O. Tens 4x2 + 5x1 = 13 àtoms d'oxigen a la dreta. Escriu la fracció 13/2 davant de l'O₂."
       },
       {
         id: 5,
         type: "Combustió (Etè)",
         reactants: [
-          { formula: "C_2H_4", display: "C₂H₄", atoms: { C: 2, H: 4 } },
-          { formula: "O_2", display: "O₂", atoms: { O: 2 } }
+          { formula: "\\text{C}_2\\text{H}_4", display: "C₂H₄", atoms: { C: 2, H: 4 } },
+          { formula: "\\text{O}_2", display: "O₂", atoms: { O: 2 } }
         ],
         products: [
-          { formula: "CO_2", display: "CO₂", atoms: { C: 1, O: 2 } },
-          { formula: "H_2O", display: "H₂O", atoms: { H: 2, O: 1 } }
+          { formula: "\\text{CO}_2", display: "CO₂", atoms: { C: 1, O: 2 } },
+          { formula: "\\text{H}_2\\text{O}", display: "H₂O", atoms: { H: 2, O: 1 } }
         ],
-        hint: "Posa 2 a CO₂ i 2 a H₂O. Comptabilitza els àtoms d'òxigen a la dreta (4 + 2 = 6) i col·loca un 3 a l'O₂."
+        hint: "Posa 2 a CO₂ i 2 a H₂O. Comptabilitza els àtoms d'oxigen a la dreta (4 + 2 = 6) i col·loca un 3 a l'O₂."
       },
       {
         id: 6,
         type: "Combustió (Etanol)",
         reactants: [
-          { formula: "C_2H_5OH", display: "C₂H₅OH", atoms: { C: 2, H: 6, O: 1 } },
-          { formula: "O_2", display: "O₂", atoms: { O: 2 } }
+          { formula: "\\text{C}_2\\text{H}_5\\text{OH}", display: "C₂H₅OH", atoms: { C: 2, H: 6, O: 1 } },
+          { formula: "\\text{O}_2", display: "O₂", atoms: { O: 2 } }
         ],
         products: [
-          { formula: "CO_2", display: "CO₂", atoms: { C: 1, O: 2 } },
-          { formula: "H_2O", display: "H₂O", atoms: { H: 2, O: 1 } }
+          { formula: "\\text{CO}_2", display: "CO₂", atoms: { C: 1, O: 2 } },
+          { formula: "\\text{H}_2\\text{O}", display: "H₂O", atoms: { H: 2, O: 1 } }
         ],
         hint: "Compte: l'etanol té 6 H en total i ja inclou 1 àtom d'O. Ajusta 2 CO₂ i 3 H₂O (7 O a la dreta). Resta 1 O de l'etanol -> queden 6 O per a l'O₂ (3 O₂)."
       },
@@ -453,11 +472,11 @@
         id: 7,
         type: "Síntesi (Amoníac)",
         reactants: [
-          { formula: "N_2", display: "N₂", atoms: { N: 2 } },
-          { formula: "H_2", display: "H₂", atoms: { H: 2 } }
+          { formula: "\\text{N}_2", display: "N₂", atoms: { N: 2 } },
+          { formula: "\\text{H}_2", display: "H₂", atoms: { H: 2 } }
         ],
         products: [
-          { formula: "NH_3", display: "NH₃", atoms: { N: 1, H: 3 } }
+          { formula: "\\text{NH}_3", display: "NH₃", atoms: { N: 1, H: 3 } }
         ],
         hint: "Si mantens 1 N₂, tindràs 2 NH₃ a la dreta. Això fa 6 H en total, així que caldrà un 3 davant de l'H₂."
       },
@@ -465,11 +484,11 @@
         id: 8,
         type: "Síntesi (Aigua - Amb Fracció)",
         reactants: [
-          { formula: "H_2", display: "H₂", atoms: { H: 2 } },
-          { formula: "O_2", display: "O₂", atoms: { O: 2 } }
+          { formula: "\\text{H}_2", display: "H₂", atoms: { H: 2 } },
+          { formula: "\\text{O}_2", display: "O₂", atoms: { O: 2 } }
         ],
         products: [
-          { formula: "H_2O", display: "H₂O", atoms: { H: 2, O: 1 } }
+          { formula: "\\text{H}_2\\text{O}", display: "H₂O", atoms: { H: 2, O: 1 } }
         ],
         hint: "Pots fer servir la fracció 1/2 davant de l'O₂ per obtenir 1 àtom d'O, o duplicar tots els coeficients (2, 1, 2)."
       },
@@ -477,11 +496,11 @@
         id: 9,
         type: "Síntesi (Òxid de Ferro III)",
         reactants: [
-          { formula: "Fe", display: "Fe", atoms: { Fe: 1 } },
-          { formula: "O_2", display: "O₂", atoms: { O: 2 } }
+          { formula: "\\text{Fe}", display: "Fe", atoms: { Fe: 1 } },
+          { formula: "\\text{O}_2", display: "O₂", atoms: { O: 2 } }
         ],
         products: [
-          { formula: "Fe_2O_3", display: "Fe₂O₃", atoms: { Fe: 2, O: 3 } }
+          { formula: "\\text{Fe}_2\\text{O}_3", display: "Fe₂O₃", atoms: { Fe: 2, O: 3 } }
         ],
         hint: "Als productes hi ha 2 Fe i 3 O. Pots posar 2 al Fe i la fracció 3/2 a l'O₂ (o bé 4 Fe, 3 O₂ i 2 Fe₂O₃)."
       },
@@ -489,11 +508,11 @@
         id: 10,
         type: "Descomposició (Clorat de Potassi)",
         reactants: [
-          { formula: "KClO_3", display: "KClO₃", atoms: { K: 1, Cl: 1, O: 3 } }
+          { formula: "\\text{KClO}_3", display: "KClO₃", atoms: { K: 1, Cl: 1, O: 3 } }
         ],
         products: [
-          { formula: "KCl", display: "KCl", atoms: { K: 1, Cl: 1 } },
-          { formula: "O_2", display: "O₂", atoms: { O: 2 } }
+          { formula: "\\text{KCl}", display: "KCl", atoms: { K: 1, Cl: 1 } },
+          { formula: "\\text{O}_2", display: "O₂", atoms: { O: 2 } }
         ],
         hint: "El K i el Cl ja estan igualats. Com que hi ha 3 O a l'esquerra i 2 a la dreta, utilitza la fracció 3/2 davant de l'O₂."
       },
@@ -501,11 +520,11 @@
         id: 11,
         type: "Descomposició (Calcària)",
         reactants: [
-          { formula: "CaCO_3", display: "CaCO₃", atoms: { Ca: 1, C: 1, O: 3 } }
+          { formula: "\\text{CaCO}_3", display: "CaCO₃", atoms: { Ca: 1, C: 1, O: 3 } }
         ],
         products: [
-          { formula: "CaO", display: "CaO", atoms: { Ca: 1, O: 1 } },
-          { formula: "CO_2", display: "CO₂", atoms: { C: 1, O: 2 } }
+          { formula: "\\text{CaO}", display: "CaO", atoms: { Ca: 1, O: 1 } },
+          { formula: "\\text{CO}_2", display: "CO₂", atoms: { C: 1, O: 2 } }
         ],
         hint: "Comprova els àtoms: 1 Ca, 1 C i 3 O a cada costat. Pots deixar les caselles en blanc (equival a 1)."
       },
@@ -513,12 +532,12 @@
         id: 12,
         type: "Desplaçament (Sodi i Aigua)",
         reactants: [
-          { formula: "Na", display: "Na", atoms: { Na: 1 } },
-          { formula: "H_2O", display: "H₂O", atoms: { H: 2, O: 1 } }
+          { formula: "\\text{Na}", display: "Na", atoms: { Na: 1 } },
+          { formula: "\\text{H}_2\\text{O}", display: "H₂O", atoms: { H: 2, O: 1 } }
         ],
         products: [
-          { formula: "NaOH", display: "NaOH", atoms: { Na: 1, O: 1, H: 1 } },
-          { formula: "H_2", display: "H₂", atoms: { H: 2 } }
+          { formula: "\\text{NaOH}", display: "NaOH", atoms: { Na: 1, O: 1, H: 1 } },
+          { formula: "\\text{H}_2", display: "H₂", atoms: { H: 2 } }
         ],
         hint: "A la dreta tens 3 H en total (1 a NaOH + 2 a H₂). Utilitza la fracció 1/2 davant de l'H₂ per tenir exactament 2 H."
       },
@@ -526,12 +545,12 @@
         id: 13,
         type: "Desplaçament (Magnesi i Àcid Clorhídric)",
         reactants: [
-          { formula: "Mg", display: "Mg", atoms: { Mg: 1 } },
-          { formula: "HCl", display: "HCl", atoms: { H: 1, Cl: 1 } }
+          { formula: "\\text{Mg}", display: "Mg", atoms: { Mg: 1 } },
+          { formula: "\\text{HCl}", display: "HCl", atoms: { H: 1, Cl: 1 } }
         ],
         products: [
-          { formula: "MgCl_2", display: "MgCl₂", atoms: { Mg: 1, Cl: 2 } },
-          { formula: "H_2", display: "H₂", atoms: { H: 2 } }
+          { formula: "\\text{MgCl}_2", display: "MgCl₂", atoms: { Mg: 1, Cl: 2 } },
+          { formula: "\\text{H}_2", display: "H₂", atoms: { H: 2 } }
         ],
         hint: "Fixa't en el MgCl₂ (2 Cl) i en l'H₂ (2 H). Col·locant un 2 davant de l'HCl la reacció queda perfectament ajustada."
       },
@@ -539,38 +558,38 @@
         id: 14,
         type: "Desplaçament (Alumini i Àcid Clorhídric)",
         reactants: [
-          { formula: "Al", display: "Al", atoms: { Al: 1 } },
-          { formula: "HCl", display: "HCl", atoms: { H: 1, Cl: 1 } }
+          { formula: "\\text{Al}", display: "Al", atoms: { Al: 1 } },
+          { formula: "\\text{HCl}", display: "HCl", atoms: { H: 1, Cl: 1 } }
         ],
         products: [
-          { formula: "AlCl_3", display: "AlCl₃", atoms: { Al: 1, Cl: 3 } },
-          { formula: "H_2", display: "H₂", atoms: { H: 2 } }
+          { formula: "\\text{AlCl}_3", display: "AlCl₃", atoms: { Al: 1, Cl: 3 } },
+          { formula: "\\text{H}_2", display: "H₂", atoms: { H: 2 } }
         ],
-        hint: "Si posis 3 a HCl per als 3 Cl, tindràs 3 H. Per tant, posa la fracció 3/2 davant de l'H₂!"
+        hint: "Si poses 3 a HCl per als 3 Cl, tindràs 3 H. Per tant, posa la fracció 3/2 davant de l'H₂!"
       },
       {
         id: 15,
         type: "Síntesi (Triòxid de Sofre)",
         reactants: [
-          { formula: "SO_2", display: "SO₂", atoms: { S: 1, O: 2 } },
-          { formula: "O_2", display: "O₂", atoms: { O: 2 } }
+          { formula: "\\text{SO}_2", display: "SO₂", atoms: { S: 1, O: 2 } },
+          { formula: "\\text{O}_2", display: "O₂", atoms: { O: 2 } }
         ],
         products: [
-          { formula: "SO_3", display: "SO₃", atoms: { S: 1, O: 3 } }
+          { formula: "\\text{SO}_3", display: "SO₃", atoms: { S: 1, O: 3 } }
         ],
-        hint: "El sofre ja està equilibrat (1 a cada costat). Per a l'òxigen: tens 2 a SO₂. Necessites 1 àtom més de l'O₂, així que posa la fracció 1/2 a l'O₂."
+        hint: "El sofre ja està equilibrat (1 a cada costat). Per a l'oxigen: tens 2 a SO₂. Necessites 1 àtom més de l'O₂, així que posa la fracció 1/2 a l'O₂."
       },
       {
         id: 16,
         type: "Reacció Carbonat i Àcid (Sodi i HCl)",
         reactants: [
-          { formula: "Na_2CO_3", display: "Na₂CO₃", atoms: { Na: 2, C: 1, O: 3 } },
-          { formula: "HCl", display: "HCl", atoms: { H: 1, Cl: 1 } }
+          { formula: "\\text{Na}_2\\text{CO}_3", display: "Na₂CO₃", atoms: { Na: 2, C: 1, O: 3 } },
+          { formula: "\\text{HCl}", display: "HCl", atoms: { H: 1, Cl: 1 } }
         ],
         products: [
-          { formula: "NaCl", display: "NaCl", atoms: { Na: 1, Cl: 1 } },
-          { formula: "H_2O", display: "H₂O", atoms: { H: 2, O: 1 } },
-          { formula: "CO_2", display: "CO₂", atoms: { C: 1, O: 2 } }
+          { formula: "\\text{NaCl}", display: "NaCl", atoms: { Na: 1, Cl: 1 } },
+          { formula: "\\text{H}_2\\text{O}", display: "H₂O", atoms: { H: 2, O: 1 } },
+          { formula: "\\text{CO}_2", display: "CO₂", atoms: { C: 1, O: 2 } }
         ],
         hint: "Ajusta 2 Na a NaCl. Això dona 2 Cl, per tant cal un 2 a HCl. Comprova l'H i l'O: queden automàticament equilibrats!"
       },
@@ -578,12 +597,12 @@
         id: 17,
         type: "Desplaçament (Zinc i HCl)",
         reactants: [
-          { formula: "Zn", display: "Zn", atoms: { Zn: 1 } },
-          { formula: "HCl", display: "HCl", atoms: { H: 1, Cl: 1 } }
+          { formula: "\\text{Zn}", display: "Zn", atoms: { Zn: 1 } },
+          { formula: "\\text{HCl}", display: "HCl", atoms: { H: 1, Cl: 1 } }
         ],
         products: [
-          { formula: "ZnCl_2", display: "ZnCl₂", atoms: { Zn: 1, Cl: 2 } },
-          { formula: "H_2", display: "H₂", atoms: { H: 2 } }
+          { formula: "\\text{ZnCl}_2", display: "ZnCl₂", atoms: { Zn: 1, Cl: 2 } },
+          { formula: "\\text{H}_2", display: "H₂", atoms: { H: 2 } }
         ],
         hint: "Només cal un 2 davant de l'HCl per equilibrar els 2 Cl del ZnCl₂ i els 2 H de l'H₂."
       },
@@ -591,12 +610,12 @@
         id: 18,
         type: "Desplaçament (Ferro i Àcid Sulfúric)",
         reactants: [
-          { formula: "Fe", display: "Fe", atoms: { Fe: 1 } },
-          { formula: "H_2SO_4", display: "H₂SO₄", atoms: { H: 2, S: 1, O: 4 } }
+          { formula: "\\text{Fe}", display: "Fe", atoms: { Fe: 1 } },
+          { formula: "\\text{H}_2\\text{SO}_4", display: "H₂SO₄", atoms: { H: 2, S: 1, O: 4 } }
         ],
         products: [
-          { formula: "FeSO_4", display: "FeSO₄", atoms: { Fe: 1, S: 1, O: 4 } },
-          { formula: "H_2", display: "H₂", atoms: { H: 2 } }
+          { formula: "\\text{FeSO}_4", display: "FeSO₄", atoms: { Fe: 1, S: 1, O: 4 } },
+          { formula: "\\text{H}_2", display: "H₂", atoms: { H: 2 } }
         ],
         hint: "Tots els elements estan equilibrats directament 1 a 1. Deixa totes les caselles en blanc!"
       }
@@ -612,17 +631,12 @@
     let errorLog = [];
 
     /* ==========================================================================
-       PARSEJADOR DE FRACCIONS I COEFICIENTS (MODIFICACIÓ 1: EN BLANC = 1)
+       PARSEJADOR DE FRACCIONS I COEFICIENTS (EN BLANC = 1)
        ========================================================================== */
-    /**
-     * Si la cadena està buida o té només espais, RETORNA 1 PER DEFECTE.
-     * Si conté una fracció (ex. "3/2"), divideix numerador per denominador.
-     * Si conté un número decimal o enter, el converteix a float.
-     */
     function parseFractionOrNumber(str) {
       if (str === undefined || str === null) return 1;
       const clean = str.toString().trim().replace(',', '.');
-      if (clean === '') return 1; // MODIFICACIÓ 1: Si està en blanc, es considera 1
+      if (clean === '') return 1;
 
       if (clean.includes('/')) {
         const parts = clean.split('/');
@@ -637,15 +651,8 @@
       return isNaN(val) ? NaN : val;
     }
 
-    /**
-     * Formatació de fòrmules químiques amb subíndexs HTML
-     */
-    function formatFormulaHTML(formulaStr) {
-      return formulaStr.replace(/([A-Za-z\)])(\d+)/g, '$1<sub>$2</sub>');
-    }
-
     /* ==========================================================================
-       COMMUTADOR MODE FOSC / MODE LLUMINÓS (MODIFICACIÓ 2)
+       COMMUTADOR MODE FOSC / MODE LLUMINÓS
        ========================================================================== */
     function toggleTheme() {
       const htmlEl = document.documentElement;
@@ -675,7 +682,6 @@
       }
     }
 
-    // Carregar tema preferit previ
     function initTheme() {
       const savedTheme = localStorage.getItem('chemistry_app_theme') || 'dark';
       document.documentElement.setAttribute('data-theme', savedTheme);
@@ -692,6 +698,7 @@
        ========================================================================== */
     window.addEventListener('DOMContentLoaded', () => {
       initTheme();
+      renderAllKaTeXElements();
       document.getElementById('statTotal').innerText = REACTIONS_DB.length;
       document.getElementById('totalIdxText').innerText = REACTIONS_DB.length;
       loadReaction(0);
@@ -725,14 +732,14 @@
         const input = document.createElement('input');
         input.type = 'text';
         input.className = 'coeff-input rounded-xl';
-        input.placeholder = '1'; // Placeholder educatiu que indica que buit = 1
+        input.placeholder = '1';
         input.dataset.type = 'reactant';
         input.dataset.index = i;
         input.addEventListener('input', updateLiveAtomTable);
 
         const formSpan = document.createElement('span');
         formSpan.className = 'font-semibold text-xl sm:text-2xl tracking-wide';
-        formSpan.innerHTML = formatFormulaHTML(r.display);
+        mInline(r.formula, formSpan);
 
         wrap.appendChild(input);
         wrap.appendChild(formSpan);
@@ -767,22 +774,12 @@
 
         const formSpan = document.createElement('span');
         formSpan.className = 'font-semibold text-xl sm:text-2xl tracking-wide';
-        formSpan.innerHTML = formatFormulaHTML(p.display);
+        mInline(p.formula, formSpan);
 
         wrap.appendChild(input);
         wrap.appendChild(formSpan);
         container.appendChild(wrap);
       });
-
-      if (window.renderMathInElement) {
-        renderMathInElement(document.body, {
-          delimiters: [
-            {left: '$$', right: '$$', display: true},
-            {left: '$', right: '$', display: false}
-          ],
-          throwOnError: false
-        });
-      }
 
       updateLiveAtomTable();
     }
@@ -803,7 +800,6 @@
       const productCoeffs = [];
 
       inputs.forEach(inp => {
-        // Obtenir valor (si està en blanc, parseFractionOrNumber retorna 1)
         const val = parseFractionOrNumber(inp.value);
         const coeff = isNaN(val) || val <= 0 ? 1 : val;
 
@@ -874,7 +870,6 @@
         const raw = inp.value.trim();
         const val = parseFractionOrNumber(raw);
 
-        // Si l'usuari ha escrit un format invàlid (no és número/fracció o és <= 0)
         if (isNaN(val) || val <= 0) {
           hasInvalidFormat = true;
         }
@@ -893,7 +888,7 @@
       if (hasInvalidFormat) {
         feedbackBox.classList.add('bg-amber-500/10', 'border-amber-500/40', 'text-amber-700', 'dark:text-amber-300');
         feedbackIcon.innerText = '⚠️';
-        feedbackText.innerHTML = "Has introduit un valor no vàlid. Escriu números positius (ex. <code>1</code>, <code>2</code>) o fraccions (ex. <code>3/2</code>, <code>7/2</code>).";
+        feedbackText.innerHTML = "Has introduït un valor no vàlid. Escriu números positius (ex. <code>1</code>, <code>2</code>) o fraccions (ex. <code>3/2</code>, <code>7/2</code>).";
         return;
       }
 
@@ -1054,17 +1049,14 @@
 
       hintText.innerText = rxn.hint;
       hintBox.classList.remove('hidden');
-
-      if (window.renderMathInElement) {
-        renderMathInElement(hintBox, {
-          delimiters: [{left: '$', right: '$', display: false}],
-          throwOnError: false
-        });
-      }
     }
 
     function toggleGuide() {
-      document.getElementById('guideSection').classList.toggle('hidden');
+      const guide = document.getElementById('guideSection');
+      guide.classList.toggle('hidden');
+      if (!guide.classList.contains('hidden')) {
+        renderAllKaTeXElements();
+      }
     }
   </script>
 </body>
